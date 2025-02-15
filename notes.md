@@ -38,3 +38,10 @@ this will install langchain for openAI.
 
 We don't want to store messages locally, we can get a db and satore messages there like firebase.
 (Storing mesages to the cloud.)
+
+# Prompt Templates
+
+A PromptTemplate in LangChain is a structured way to format prompts dynamically. It allows you to define a prompt with placeholders and then fill in those placeholders with actual values at runtime. This helps in creating reusable and consistent prompts for LLM interactions.
+
+There is one limitation with this, whenever we create a prompt template and give it values, it is always a list with one humanMessage. What if we want more control? like customising the SystemMessage too.
+For that we can have a list of tuples.(refer to code)
