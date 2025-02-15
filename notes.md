@@ -45,3 +45,14 @@ A PromptTemplate in LangChain is a structured way to format prompts dynamically.
 
 There is one limitation with this, whenever we create a prompt template and give it values, it is always a list with one humanMessage. What if we want more control? like customising the SystemMessage too.
 For that we can have a list of tuples.(refer to code)
+
+# Chains
+
+Chains are sequences of modular components (like LLMs, prompt templates, memory, and tools) that work together to process and generate responses. Instead of handling each step separately, Chains automate the flow of data through these components.
+
+## Types of Chaining
+
+1. ParallelChain – Lets tasks run independently without being dependent on each other.
+2. SequentialChain – Chains multiple steps together in sequence.
+3. RouterChain / ConditionalChaining – Routes inputs to different sub-chains based on conditions.
+4. AgentChain – Uses AI agents to decide which tools or actions to use.
