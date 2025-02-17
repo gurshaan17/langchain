@@ -14,8 +14,7 @@ Before using LangChain, create a virtual environment:
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate  # (for macOS/Linux)
-.venv\Scripts\activate     # (for Windows)
+source .venv/bin/activate
 ```
 
 Then install the required package:
