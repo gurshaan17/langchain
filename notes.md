@@ -1,125 +1,148 @@
-# LANGCHAIN
+# **LangChain**
 
-Langchain core components
-1. Chat models
-2. Prompt templates
-3. Chains
-4. RAGs
-5. Agents and tools
+## **Core Components**
 
-For using langchain, first we create a virtual environment.
+1. **Chat Models**
+2. **Prompt Templates**
+3. **Chains**
+4. **Retrieval Augmented Generation (RAGs)**
+5. **Agents and Tools**
+6. **Memory** (Allows persistence of past interactions for better context)
 
-```python
+## **Setting Up LangChain**
+Before using LangChain, create a virtual environment:
+
+```bash
 python3 -m venv .venv
+source .venv/bin/activate  # (for macOS/Linux)
+.venv\Scripts\activate     # (for Windows)
 ```
 
-## Chat Models
-Chat models is a component designed to communicate in a structured way with LLMs like GPT-4, Hugging Face and Claude Sonnet.
+Then install the required package:
 
-Why use langchain chat models? 
-
-1. Consistent Workflow
-2. Easy switching between LLMs
-3. Context management
-4. Efficient chaining
-5. Scalability
-
-```
+```bash
 pip3 install -qU langchain-openai
 ```
 
-this will install langchain for openAI.
+## **Chat Models**
+Chat models allow structured communication with LLMs like GPT-4, Hugging Face models, and Claude Sonnet.
 
-## Types of Messages in Langchain
+### **Why Use LangChain Chat Models?**
+1. **Consistent Workflow**
+2. **Easy Switching Between LLMs**
+3. **Context Management**
+4. **Efficient Chaining**
+5. **Scalability**
 
-1. System Message: Defines the AI's role and sets the context for the conversation. Eg: 'Youa re a marketing agent.'
-2. Human Message: Represents user input or questions directe towards AI.
-3. AI Message: Contains the AI response based on previous messages.
+### **Types of Messages in LangChain**
+1. **System Message** – Defines the AI's role and sets context. Example: *"You are a marketing agent."*
+2. **Human Message** – Represents user input or questions directed towards AI.
+3. **AI Message** – Contains the AI response based on previous messages.
 
-We don't want to store messages locally, we can get a db and satore messages there like firebase.
-(Storing mesages to the cloud.)
+(For cloud storage, messages can be stored in Firebase or other databases instead of locally.)
 
-# Prompt Templates
+---
 
-A PromptTemplate in LangChain is a structured way to format prompts dynamically. It allows you to define a prompt with placeholders and then fill in those placeholders with actual values at runtime. This helps in creating reusable and consistent prompts for LLM interactions.
+## **Prompt Templates**
+A **PromptTemplate** in LangChain is a structured way to format prompts dynamically. It allows placeholders that can be filled at runtime, ensuring reusable and consistent prompts.
 
-There is one limitation with this, whenever we create a prompt template and give it values, it is always a list with one humanMessage. What if we want more control? like customising the SystemMessage too.
-For that we can have a list of tuples.(refer to code)
+### **Limitation & Workaround**
+By default, prompt templates take values as a list containing a single HumanMessage. To allow more control, such as customizing SystemMessage too, a list of tuples can be used instead. (This approach ensures better flexibility.)
 
-# Chains
+---
 
-Chains are sequences of modular components (like LLMs, prompt templates, memory, and tools) that work together to process and generate responses. Instead of handling each step separately, Chains automate the flow of data through these components.
+## **Chains**
+Chains are sequences of modular components (LLMs, prompt templates, memory, tools) that process and generate responses efficiently.
 
-## Types of Chaining
+### **Types of Chains**
+1. **ParallelChain** – Tasks run independently.
+2. **SequentialChain** – Steps execute in sequence.
+3. **RouterChain / ConditionalChaining** – Routes inputs to different sub-chains based on conditions.
+4. **AgentChain** – Uses AI agents to decide which tools/actions to use.
 
-1. ParallelChain – Lets tasks run independently without being dependent on each other.
-2. SequentialChain – Chains multiple steps together in sequence.
-3. RouterChain / ConditionalChaining – Routes inputs to different sub-chains based on conditions.
-4. AgentChain – Uses AI agents to decide which tools or actions to use.
+---
 
+## **Retrieval Augmented Generation (RAGs)**
+### **Why Use RAGs?**
+RAGs allow LLMs to access external knowledge sources, solving the limitation of context window size by retrieving only relevant information instead of overwhelming the model.
 
-# RAGs
+### **How RAGs Work**
+1. **Chunking** – Splits large documents into smaller chunks.
+2. **Retrieval** – Queries only the relevant chunks.
+3. **Embeddings & Vector Databases** – Converts text into vector embeddings, storing them efficiently for retrieval.
 
-Retrieval Augmented Generation
-The main problem RAGs solve is giving the LLm additional knowledge.
-RAGs are used to provide LLMs an exzternal sourceof information so that it can better reply to our prompts.
-Like a company has 100s of internal documents. If we are making AI, we can give those documents and ask the LLM then.
+![Vector Embeddings](i1.png)
+![Vector Embeddings](image.png)
 
-Context Window Limitation Challenge: 
-If we give large context, LLM struggles to answer. 
-It solves this by only pulling the relevant sections of the documents based on the prompt the user provided.
+### **Embeddings & Vector DBs**
+- **Vector embeddings** represent words, sentences, or images as mathematical vectors.
+- **Vector databases** store embeddings and allow similarity searches.
+- Example: *A cat’s vector might look like [34, 21, 7.5, -12, 0.2, 18, -3]*
+- Similar concepts are stored closer in multidimensional space.
 
-This retrieval system can search through vast sources of external information-like documents, databases, or knowledge bases-whenever the LLM needs additional knowledge to give you a better answers.
-RAGs do all this while making sure LLMs are not overwhelmed with bigger prompts. 
+![Vector Embeddings](image-1.png)
 
-![alt text](i1.png)
-![alt text](image.png)
+### **Chunk Overlap**
+Defines how much of a chunk overlaps with the next:
+- **Chunk Overlap = 0** → No overlap.
+- **Chunk Overlap = 100** → Last 100 characters of one chunk appear at the beginning of the next.
+- (This helps maintain context across queries, especially for long texts.)
 
-## Tokens
+### **RAGs with Metadata**
+Metadata helps identify the source of retrieved chunks, e.g., book title, chapter, paragraph number.
 
-In the context of language models, a token is a unit of text that the model processes.
-Tokens can be as short as one character or as long as one word, depending on the language and structure of the text.
+---
 
-In a RAG system, the data goes througha process called chunking. Chunking is a process where we split a large document into smaller chunks.
-Retriever can only query the relevant chunks then.
+## **Agents and Tools**
+Agents are AI systems capable of making autonomous decisions.
 
-After taking a huge input and chunking it, pur next goal is to extract the relevant chunks only and then send them to the model.
+### **What Are Agents?**
+Agents pick the right tool for a task without being explicitly instructed, just like a chef choosing between a knife, whisk, or oven.
 
-Here the concept of embeddings and vector DBs comes.
+### **What Are Tools?**
+Tools are specific functions that agents use to complete tasks, e.g., a calculator, search engine, or API.
 
-## Embeddings and Vector DBs
+### **How Agents Work**
+Example: *"What is the weather in Paris + 5?"*
+1. The agent retrieves the weather.
+2. The agent uses a calculator tool to add 5.
+3. The agent determines the execution order logically.
 
-A vector embedding is a mathematical representation of words, sentences or even images. For example, the word "cat" can have a vector embedding that can look something like this: [34, 21, 7.5, -12, 0.2, 18, -3]
-So this is the computer's way of making sense of the word "cat"
-Basically each of these numbers can represent a certain aspect of the word "cat".
+### **ReACT Pattern (Reasoning + Acting)**
+- **Think:** The agent reasons through the problem.
+- **Act:** The agent performs an action using tools.
+- **Observe:** The agent observes results.
+- **Repeat:** The process continues if needed.
 
-Each of the values are actual coordinates in a multi diomesional space with things are related to each other being closer to each other.
+![Agent Flow](image-2.png)
 
-![alt text](image-1.png)
+### **Example of a Multi-Step Problem**
+*"Should I pack an umbrella for my trip to London next week, and what restaurants should I book?"*
+- The agent reasons through weather data and dining options.
+- It queries weather APIs, retrieves restaurant recommendations, and synthesizes a final response.
 
-Databse storing these vector embeddings is called a vector DB.
+### **Agent Control Flow**
+1. **Prompt Initialization** – Sets task instructions and lists available tools.
+2. **Agent Execution** – The LLM decides which tool to use.
+3. **Tool Invocation** – LangChain calls the tool suggested by the LLM.
+4. **Tool Execution** – The tool runs and provides results.
+5. **LLM Response** – The LLM synthesizes a final answer.
 
-## Flowchart Continued
+---
 
-Now after we have chunks, we use a LLM embedder that converts text to embeddings. Then we would store them in the vector DB.
-Each chunk is going to have the plain text version and embeddded version too.
+## **Memory in LangChain**
+Memory in LangChain allows models to retain context from past interactions, making conversations more coherent and improving user experience.
 
+### **Types of Memory**
+1. **ConversationBufferMemory** – Stores previous interactions as a list of messages.
+2. **ConversationSummaryMemory** – Summarizes past interactions instead of storing raw messages.
+3. **ConversationBufferWindowMemory** – Keeps only the last *n* messages to manage memory usage efficiently.
+4. **VectorStoreRetrieverMemory** – Uses a vector database to store and retrieve past conversations efficiently.
 
-## User flow
+### **Why Use Memory?**
+- Provides continuity in AI-driven conversations.
+- Reduces redundancy by remembering prior exchanges.
+- Enhances personalization by retaining user preferences.
 
-When the user asks any question, his prompt is converted to an embedding as well. Then we will have a retriever, which will ask the vector store to give top5 chuinks with highest relevant chunks to the question. 
-Then we send the question and reelevant information in plain text to LLM.
+(Memory is particularly useful when working with chatbots, virtual assistants, and multi-turn interactions.)
 
-
-## Chunk overlap
-
-Chunk Overlap defines how many characters (or tokens, depending on the splitter) should be included in both the end of one chain and the beginning of the next
-By setting Chunk Overlap = 0, you are telling the splitter to ensure that there's no overlap between chunks
-If you set chunk_overlap = 100, for example, the last 100 characters of one chunk will appear at the beginning of the next chunk. This helps preserve context across chunks.
-Semantic Understanding
-Especially when working with large texts (like books), chunking with overlap can help with better understanding across the chunks when querying or processing
-
-## RAGs with meta-data
-
-Let's say we've put a 100 different private docs or books in our vector store, and we ask a question.
-In addition to getting the chunks, it'll be better if we also know where the chunk originated from right?, For ex, like it's this book, chapter 4, paragraph 3 or this document, this section, paragraph 7
